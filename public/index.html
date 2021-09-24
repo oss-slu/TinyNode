@@ -305,6 +305,7 @@
                 let origObj = await fetch(url)
                 .then(response => response.json())
                 .then(objForImport => {
+                    Object.assign(objForImport,{'@id':url})
                     fetch(UPDATE_URL, {
                         method: 'PUT',
                         body: JSON.stringify(objForImport),
