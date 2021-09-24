@@ -434,9 +434,8 @@
              */
             async function deleteAction (form) {
                 let url = form.getElementsByTagName("input")[0].value
-                fetch(DELETE_URL, {
+                fetch(`${DELETE_URL}/${url.split('id/').pop()}`, {
                     method: 'DELETE',
-                    body: url,
                     headers: new Headers({
                         'Content-Type': 'text/plain; charset=utf-8'
                     })
