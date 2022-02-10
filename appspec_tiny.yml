@@ -1,0 +1,10 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /tinythings/TinyNode
+hooks:
+  AfterInstall:
+    - location: https://urldefense.com/v3/__http://deploy_tiny.sh__;!!K543PA!Y6KceqAILpHhn-bKkjHIlVR8aRNvR1cfPXFWy5z45vH67Ibse_-XhgNIqIJfsmeG0KZE$ 
+      timeout: 300
+      runas: root
