@@ -1,5 +1,5 @@
 require('dotenv').config()
-import fetch from 'node-fetch'
+const got = require('got')
 
 // https://stackoverflow.com/a/69058154/1413302
 const isTokenExpired = (token) => (Date.now() >= JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString()).exp * 1000)
@@ -9,20 +9,17 @@ const isTokenExpired = (token) => (Date.now() >= JSON.parse(Buffer.from(token.sp
  * your RERUM-connected application. There is no way to authenticate this 
  * process, so protect your refresh token and replace it if it is exposed. 
  */
-function generateNewAccessToken() {
-    const payload = {
-        method: 'POST',
-        body: JSON.stringify({ refresh_token: process.env.refresh_token })
+async function generateNewAccessToken() {
+    try {
+        const { tokenObject } = await got.post(process.env.RERUM_ACCESS_TOKEN_URL, {
+            timeout: 10000,
+            json: { refresh_token: process.env.refresh_token }
+        }).json()
+
+        process.env.access_token = tokenObject.access_token
     }
-    fetch(process.env.RERUM_ACCESS_TOKEN_URL, payload)
-        .then(response => {
-            if (response.ok) {
-                return response.json()
-            }
-            return Promise.reject(response)
-        })
-        .then(tokenObject => process.env.access_token = tokenObject.access_token)
-        .catch(err => console.error("Token not updated: ", err))
+    catch (err) { console.error("Token not updated: ", err) }
+
     console.warn("Access Token expired. Consider updating your .env files")
 }
 

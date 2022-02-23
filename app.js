@@ -8,7 +8,7 @@ var dotenvExpand = require('dotenv-expand')
 var storedEnv = dotenv.config()
 dotenvExpand.expand(storedEnv)
 
-// require('./tokens.js') //SyntaxError: Cannot use import statement outside a module WTF
+require('./tokens.js')
 
 var indexRouter = require('./routes/index')
 var queryRouter = require('./routes/query')
