@@ -6,35 +6,39 @@ body {
 }
 
 header {
-  grid-row: mast / span 1;
+  grid-row   : mast / span 1;
   grid-column: side / span 3;
 }
- .button-panel {
-   grid-row: content / span 1;
-   grid-column: side / span 1;
- }
- .button-panel button {
-   display: block;
-   width:100%;
-   margin: .1em;
-   border-radius: 0;
-   outline: none;
-   border: none;
-   transition: 250ms;
-   cursor: pointer;
- }
- .button-panel button:hover {
-   background-color: #666666;
-   text-shadow: 0 0 2px #000;
- }
+
+.button-panel {
+  grid-row   : content / span 1;
+  grid-column: side / span 1;
+}
+
+.button-panel button {
+  display      : block;
+  width        : 100%;
+  margin       : .1em;
+  border-radius: 0;
+  outline      : none;
+  border       : none;
+  transition   : 250ms;
+  cursor       : pointer;
+}
+
+.button-panel button:hover {
+  background-color: #666666;
+  text-shadow     : 0 0 2px #000;
+}
+
 a {
   color: #00B7FF;
 }
 
 form[data-hidden] {
-  display: none;
+  display    : none;
   grid-column: page / span 1;
-  grid-row: content / span 1;
+  grid-row   : content / span 1;
 }
 
 form p {
