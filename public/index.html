@@ -384,19 +384,19 @@
                     'Content-Type': 'application/json; charset=utf-8'
                 })
             })
-                .then(response => response.json())
+                .then(response => {
+                    if (response.ok) { return response.json() }
+                    throw Error(`${response.code}: ${response.message}`)
+                })
                 .then(resultObj => {
-                    if (resultObj.code && resultObj.code >= 400) {
-                        throw Error(`${resultObj.code}: ${resultObj.message}`)
-                    }
                     setMessage("Updated URI " + uri + ".  See resulting object below.")
-                    setObject(resultObj.new_obj_state)
+                    setObject(resultObj)
                 })
                 .catch(err => {
                     console.error("There was an error trying to update object at " + uri)
                     console.error(err)
                     setMessage(err)
-                    setObject({ error: { message: err.message } }) //This is hidden with the next line of code.  Doesn't have to be.
+                    setObject({ error: { message: err.message } }) // This is hidden with the next line of code.  Doesn't have to be.
                     document.getElementById("obj-viewer").style.display = "none"
                 })
         }
