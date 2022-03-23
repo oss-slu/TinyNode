@@ -4,8 +4,7 @@
 <head>
     <title>Tiny Things by Rerum</title>
     <link rel="stylesheet" href="stylesheets/style.css">
-    <script defer src="scripts/config.js"></script>
-    <script defer src="scripts/main.js"></script>
+    <script type="module" src="scripts/main.js"></script>
 </head>
 
 <body>
@@ -16,15 +15,15 @@
     </header>
 
     <div class="button-panel">
-        <button data-lang-key="createBtn" role="button" onclick="showForm('create')"></button>
-        <button data-lang-key="updateBtn" role="button" onclick="showForm('rerumUpdate')"></button>
-        <button data-lang-key="overwriteBtn" role="button" onclick="showForm('overwrite')"></button>
-        <button data-lang-key="deleteBtn" role="button" onclick="showForm('deleteObj')"></button>
-        <button data-lang-key="queryBtn" role="button" onclick="showForm('query')"></button>
-        <button data-lang-key="importBtn" role="button" onclick="showForm('remoteUpdate')"></button>
+        <button data-lang-key="createBtn" role="button" onclick="UI.showForm('create')"></button>
+        <button data-lang-key="updateBtn" role="button" onclick="UI.showForm('rerumUpdate')"></button>
+        <button data-lang-key="overwriteBtn" role="button" onclick="UI.showForm('overwrite')"></button>
+        <button data-lang-key="deleteBtn" role="button" onclick="UI.showForm('deleteObj')"></button>
+        <button data-lang-key="queryBtn" role="button" onclick="UI.showForm('query')"></button>
+        <button data-lang-key="importBtn" role="button" onclick="UI.showForm('remoteUpdate')"></button>
     </div>
 
-    <form id="query" action="javascript:void(0);" onsubmit="queryAction(this)" data-hidden="true">
+    <form id="query" action="javascript:void(0);" onsubmit="Action.query(this)" data-hidden="true">
         <h2 data-lang-key="queryTitle"></h2>
         <p data-lang-key="queryDesc"></p>
         <label for="importId" data-lang-key="queryHelpText1">
@@ -35,7 +34,7 @@
         <input type="text" id="queryValue" />
         <button type="submit" role="button" data-lang-key="queryBtn"> </button>
     </form>
-    <form id="remoteUpdate" action="javascript:void(0);" onsubmit="importAction(this)" data-hidden="true">
+    <form id="remoteUpdate" action="javascript:void(0);" onsubmit="Action.import(this)" data-hidden="true">
         <h2 data-lang-key="importTitle"></h2>
         <p data-lang-key="importDesc">
         </p>
@@ -44,7 +43,7 @@
         <input type="url" id="importId" />
         <button type="submit" role="button" data-lang-key="importBtn"> </button>
     </form>
-    <form id="rerumUpdate" action="javascript:void(0);" onsubmit="updateAction(this)" data-hidden="true">
+    <form id="rerumUpdate" action="javascript:void(0);" onsubmit="Action.update(this)" data-hidden="true">
         <h2 data-lang-key="updateTitle"></h2>
         <p data-lang-key="updateDesc">
         </p>
@@ -56,7 +55,7 @@
         <textarea id="updateJSON"></textarea>
         <button type="submit" role="button" data-lang-key="updateBtn"> </button>
     </form>
-    <form id="overwrite" action="javascript:void(0);" onsubmit="overwriteAction(this)" data-hidden="true">
+    <form id="overwrite" action="javascript:void(0);" onsubmit="Action.overwrite(this)" data-hidden="true">
         <h2 data-lang-key="overwriteTitle"></h2>
         <p data-lang-key="overwriteDesc">
         </p>
@@ -68,7 +67,7 @@
         <textarea id="overwriteJSON"></textarea>
         <button type="submit" role="button" data-lang-key="overwriteBtn"> </button>
     </form>
-    <form id="create" action="javascript:void(0);" onsubmit="createAction(this)">
+    <form id="create" action="javascript:void(0);" onsubmit="Action.createAction(this)">
         <h2 data-lang-key="createTitle"></h2>
         <p data-lang-key="createDesc"></p>
         <label for="createJSON" data-lang-key="createHelpText">
@@ -76,7 +75,7 @@
         <textarea id="createJSON"></textarea>
         <button type="submit" role="button" data-lang-key="createBtn"> </button>
     </form>
-    <form id="deleteObj" action="javascript:void(0);" onsubmit="deleteAction(this)" data-hidden="true">
+    <form id="deleteObj" action="javascript:void(0);" onsubmit="Action.delete(this)" data-hidden="true">
         <h2 data-lang-key="deleteTitle"></h2>
         <p data-lang-key="deleteDesc">
         </p>

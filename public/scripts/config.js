@@ -1,3 +1,8 @@
+/**
+ * These configurations are for the basic site and should be replaced entirely in your application.
+ * @cubap
+ */
+
 const config = {
     langKey: {
         appName: "Tiny Things v.1.2",
@@ -38,3 +43,10 @@ const config = {
 
     }
 }
+
+// initialize page
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('[data-lang-key]').forEach(el => el.textContent = config.langKey[el.dataset.langKey])
+})
+
+export { config as default }
