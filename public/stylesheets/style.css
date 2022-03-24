@@ -194,7 +194,8 @@ div#obj-viewer {
 
 .api-legend span {
   display: block;
-  text-indent: .68em;
+  text-indent: -2em;
+  margin-left: 2.68em;
 }
 
 .api-legend .payload {
