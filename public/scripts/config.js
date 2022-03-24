@@ -8,6 +8,8 @@ const config = {
         appName: "Tiny Things v.1.2",
         appDesc: "Simple web forms to ping RERUM operations.",
 
+        loadExample: "load example",
+
         createBtn: "create",
         createTitle: "create resource",
         createDesc: "Provide a valid JSON object to create an object in RERUM attributed to your RERUM registered application.",
@@ -41,7 +43,8 @@ const config = {
         importDesc: "Provide the URI of an object external to RERUM to be imported into RERUM and attribute to your RERUM registered application. This results in a new object in RERUM that references the original provided URI so as not to alter the original object.",
         importHelpText: "URI to Import",
 
-    }
+    },
+        RERUM_REGISTRATION_URL: 'https://storedev.rerum.io/v1/' // imported from .env file
 }
 
 // initialize page

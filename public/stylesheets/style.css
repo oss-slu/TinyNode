@@ -3,11 +3,11 @@ body {
   font                 : 14px "Lucida Grande", Helvetica, Arial, sans-serif;
   grid-template-rows   : [mast] 1fr [content] auto [base] 1fr;
   grid-template-columns: [side] 1fr [page] 6fr;
-  width: clamp(16rem, 90vw, 70rem);
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
+  width                : clamp(16rem, 90vw, 70rem);
+  margin-left          : auto;
+  margin-right         : auto;
+  padding-left         : 1.5rem;
+  padding-right        : 1.5rem;
 }
 
 header {
@@ -15,30 +15,31 @@ header {
   grid-column: side / span 3;
 }
 
-button, h2 {
+button,
+h2 {
   text-transform: capitalize;
 }
 
 .button-panel {
-  grid-row   : content / span 1;
-  grid-column: side / span 1;
-  display: flex;
-  flex-wrap: wrap;
-  gap: .2em;
+  grid-row      : content / span 1;
+  grid-column   : side / span 1;
+  display       : flex;
+  flex-wrap     : wrap;
+  gap           : .2em;
   flex-direction: column;
 }
 
 .button-panel button {
-  display: flex;
+  display        : flex;
   justify-content: center;
-  align-items: center;
-  border-radius: 0;
-  outline      : none;
-  border       : none;
-  transition   : 250ms;
-  cursor       : pointer;
-  text-transform: capitalize;
-  line-height: 2;
+  align-items    : center;
+  border-radius  : 0;
+  outline        : none;
+  border         : none;
+  transition     : 250ms;
+  cursor         : pointer;
+  text-transform : capitalize;
+  line-height    : 2;
 }
 
 .button-panel button:hover {
@@ -50,7 +51,8 @@ a {
   color: #00B7FF;
 }
 
-form[data-hidden], #obj-viewer {
+form[data-hidden],
+#obj-viewer {
   display    : none;
   grid-column: page / span 1;
   grid-row   : content / span 1;
@@ -86,6 +88,22 @@ textarea {
   font-size    : 1.2rem;
 }
 
+button.example {
+  border          : none;
+  outline         : 1px solid #a3d1ff;
+  font-size       : .8em;
+  border-radius   : 1px;
+  background-color: transparent;
+  cursor          : pointer;
+  transition      : outline-offset 100ms;
+  outline-offset  : 0px;
+}
+
+button.example:hover,
+button.example:focus {
+  outline-offset: 2px;
+}
+
 textarea,
 input {
   display      : block;
@@ -107,21 +125,24 @@ button[type="submit"]::before {
 html,
 body {
   background : hsl(0, 0%, 2%);
-  background:  repeating-conic-gradient(hsl(0, 0%, 2%) 0% 25%, hsl(0, 0%, 5%) 0% 50%) 
-    50%/ 3em 3em;
+  background : repeating-conic-gradient(hsl(0, 0%, 2%) 0% 25%, hsl(0, 0%, 5%) 0% 50%) 50%/ 3em 3em;
   color      : #d6d6d6;
   font-family: sans-serif;
 }
 
 form {
-  border : thin solid hsl(210, 100%, 82%);
-  padding: .5rem;
-  margin : 0;
+  border          : thin solid hsl(210, 100%, 82%);
+  padding         : .5rem;
+  margin          : 0;
   background-color: hsl(0, 0%, 5%);
 }
- header, .button-panel, footer {
-   background-color: hsl(0, 0%, 2%);
- }
+
+header,
+.button-panel,
+footer {
+  background-color: hsl(0, 0%, 2%);
+}
+
 div#flash-message {
   display         : none;
   background-color: hsl(0, 0%, 84%);
@@ -151,6 +172,6 @@ div#obj-viewer {
 #createJSON,
 #updateJSON,
 #overwriteJSON {
-  width : 500px;
-  height: 250px;
+  width : 25em;
+  height: 8em;
 }
