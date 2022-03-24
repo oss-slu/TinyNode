@@ -9,7 +9,7 @@ import { API } from './api.js'
  * The UI for controlling which tab shows (which happens to be a form)
  * @param {HTMLElement} form
  */
-function showForm(form) {
+function showForm(form,btn) {
     let forms = document.getElementsByTagName('form')
     for (let f of forms) {
         f.setAttribute("data-hidden", "true")
@@ -18,6 +18,11 @@ function showForm(form) {
     shownForm.removeAttribute("data-hidden")
     document.getElementById("obj-viewer").style.display = "none"
     document.getElementById("flash-message").style.display = "none"
+    const apiLegend = btn.nextElementSibling
+    if(!apiLegend.classList.contains("open")){
+        document.querySelectorAll(".api-legend").forEach(el=>el.classList.remove("open"))
+    }
+    apiLegend.classList.toggle("open")
 }
 
 /**

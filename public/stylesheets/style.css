@@ -175,3 +175,34 @@ div#obj-viewer {
   width : 25em;
   height: 8em;
 }
+
+.api-legend {
+  height: 0;
+  transition: height 250ms;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.api-legend.open {
+  height: 8em;
+}
+
+.api-legend header {
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.api-legend span {
+  display: block;
+  text-indent: .68em;
+}
+
+.api-legend .payload {
+  color: #d6d6d6;
+}
+.api-legend .returns.success {
+  color: #66ff66;
+}
+.api-legend .returns.error {
+  color: #ff6666;
+}

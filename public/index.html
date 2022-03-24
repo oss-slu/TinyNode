@@ -15,17 +15,65 @@
     </header>
 
     <div class="button-panel">
-        <button data-lang-key="createBtn" role="button" onclick="UI.showForm('create')"></button>
-        <button data-lang-key="updateBtn" role="button" onclick="UI.showForm('rerumUpdate')"></button>
-        <button data-lang-key="overwriteBtn" role="button" onclick="UI.showForm('overwrite')"></button>
-        <button data-lang-key="deleteBtn" role="button" onclick="UI.showForm('deleteObj')"></button>
-        <button data-lang-key="queryBtn" role="button" onclick="UI.showForm('query')"></button>
-        <button data-lang-key="importBtn" role="button" onclick="UI.showForm('remoteUpdate')"></button>
+        <button data-lang-key="createBtn" role="button" onclick="UI.showForm('create',this)"></button>
+        <div class="api-legend">
+            <header>post</header>
+            <span class="payload">JSON Object</span>
+            <span class="returns success">201: Success</span>
+            <span class="returns error">400: Malformed JSON</span>
+            <span class="returns error">403: No Valid Token</span>
+            <span class="returns error">500: Server Error</span>
+        </div>
+        <button data-lang-key="updateBtn" role="button" onclick="UI.showForm('rerumUpdate',this)"></button>
+        <div class="api-legend">
+            <header>put, patch</header>
+            <span class="payload">JSON Object</span>
+            <span class="returns success">200: Success</span>
+            <span class="returns error">400: Malformed JSON</span>
+            <span class="returns error">403: Object Deleted</span>
+            <span class="returns error">500: Server Error</span>
+        </div>
+        <button data-lang-key="overwriteBtn" role="button" onclick="UI.showForm('overwrite',this)"></button>
+        <div class="api-legend">
+            <header>put</header>
+            <span class="payload">JSON Object</span>
+            <span class="returns success">200: Success</span>
+            <span class="returns error">400: Malformed JSON</span>
+            <span class="returns error">403: Object Deleted or Released</span>
+            <span class="returns error">403: No Valid Token</span>
+            <span class="returns error">500: Server Error</span>
+        </div>
+        <button data-lang-key="deleteBtn" role="button" onclick="UI.showForm('deleteObj',this)"></button>
+        <div class="api-legend">
+            <header>delete</header>
+            <span class="payload">no payload</span>
+            <span class="returns success">204: Success</span>
+            <span class="returns error">401: Not Owner</span>
+            <span class="returns error">403: Object Deleted or Released</span>
+            <span class="returns error">403: No Valid Token</span>
+            <span class="returns error">500: Server Error</span>
+        </div>
+        <button data-lang-key="queryBtn" role="button" onclick="UI.showForm('query',this)"></button>
+        <div class="api-legend">
+            <header>post</header>
+            <span class="payload">JSON Object</span>
+            <span class="returns success">200: [results]</span>
+            <span class="returns error">500: Server Error</span>
+        </div>
+        <button data-lang-key="importBtn" role="button" onclick="UI.showForm('remoteUpdate',this)"></button>
+        <div class="api-legend">
+            <header>put</header>
+            <span class="payload">JSON Object</span>
+            <span class="returns success">200: Success</span>
+            <span class="returns error">403: No Valid Token</span>
+            <span class="returns error">500: Server Error</span>
+        </div>
     </div>
 
     <form id="query" action="javascript:void(0);" onsubmit="Action.query(this)" data-hidden="true">
         <h2 data-lang-key="queryTitle"></h2>
-        <button data-lang-key="loadExample" type="button" class="example" onclick="queryKey.value='test';queryValue.value='query'"></button>
+        <button data-lang-key="loadExample" type="button" class="example"
+            onclick="queryKey.value='test';queryValue.value='query'"></button>
         <p data-lang-key="queryDesc"></p>
         <label for="importId" data-lang-key="queryHelpText1">
         </label>
@@ -37,7 +85,8 @@
     </form>
     <form id="remoteUpdate" action="javascript:void(0);" onsubmit="Action.import(this)" data-hidden="true">
         <h2 data-lang-key="importTitle"></h2>
-        <button data-lang-key="loadExample" type="button" class="example" onclick="queryValue.value='https://iiif.io/api/cookbook/recipe/0001-mvm-image/manifest.json'"></button>
+        <button data-lang-key="loadExample" type="button" class="example"
+            onclick="queryValue.value='https://iiif.io/api/cookbook/recipe/0001-mvm-image/manifest.json'"></button>
         <p data-lang-key="importDesc">
         </p>
         <label for="importId" data-lang-key="importHelpText">
@@ -69,9 +118,10 @@
         <textarea id="overwriteJSON"></textarea>
         <button type="submit" role="button" data-lang-key="overwriteBtn"> </button>
     </form>
-    <form id="create" action="javascript:void(0);" onsubmit="Action.createAction(this)">
+    <form id="create" action="javascript:void(0);" onsubmit="Action.create(this)">
         <h2 data-lang-key="createTitle"></h2>
-        <button data-lang-key="loadExample" type="button" class="example" onclick="createJSON.value=JSON.stringify({test:'creating',numbers:42,booleans:true}, undefined, 4);"></button>
+        <button data-lang-key="loadExample" type="button" class="example"
+            onclick="createJSON.value=JSON.stringify({test:'creating',numbers:42,booleans:true}, undefined, 4);"></button>
         <p data-lang-key="createDesc"></p>
         <label for="createJSON" data-lang-key="createHelpText">
         </label>
