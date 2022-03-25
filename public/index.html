@@ -3,215 +3,139 @@
 
 <head>
     <title>Tiny Things by Rerum</title>
-    <style>
-        form[data-hidden] {
-            display: none;
-        }
-
-        form p {
-            font-size: 12pt;
-        }
-
-        form label {
-            font-size: 10pt;
-        }
-
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        h6,
-        button,
-        input,
-        textarea {
-            color: #a3d1ff;
-        }
-
-        button,
-        input,
-        textarea {
-            background: #262626;
-            border-color: #666666;
-            border-radius: .25em;
-            padding: .2em;
-            font-size: 1.2rem;
-        }
-
-        textarea,
-        input {
-            display: block;
-            margin-bottom: 1em;
-        }
-
-        button[type="submit"] {
-            display: block;
-            margin: 0 auto;
-            padding: .5rem 1.5rem;
-        }
-
-        button[type="submit"]::before {
-            content: "";
-            display: block;
-            width: 100%;
-        }
-
-        html,
-        body {
-            background: #060606;
-            color: #d6d6d6;
-            font-family: sans-serif;
-        }
-
-        form {
-            border: thin solid #a3d1ff;
-            padding: .5rem;
-            margin: .5rem 0;
-        }
-
-        div#flash-message {
-            display: none;
-            background-color: #d6d6d6;
-            color: #111111;
-            padding: .5em;
-            font-size: 1.2rem;
-        }
-
-        div#flash-message.error {
-            display: block;
-            background-color: #ff6666;
-        }
-
-        div#flash-message.success {
-            display: block;
-            background-color: #66ff66;
-        }
-
-        div#obj-viewer {
-            white-space: pre;
-            font-family: monospace;
-            font-size: .8rem;
-            /*max-height: 12rem;*/
-            overflow: auto;
-        }
-
-        #createJSON,
-        #updateJSON,
-        #overwriteJSON {
-            width: 500px;
-            height: 250px;
-        }
-    </style>
+    <link rel="stylesheet" href="stylesheets/style.css">
+    <script type="module" src="scripts/main.js"></script>
 </head>
 
 <body>
-    <h1>Tiny Things</h1>
-    <p>
-        Simple web forms to ping RERUM operations.
-    </p>
+    <header>
+        <h1 data-lang-key="appName"></h1>
+        <p data-lang-key="appDesc">
+        </p>
+    </header>
 
-    <div>
-        <button role="button" onclick="showForm('create')">create</button>
-        <button role="button" onclick="showForm('rerumUpdate')">update</button>
-        <button role="button" onclick="showForm('overwrite')">overwrite</button>
-        <button role="button" onclick="showForm('deleteObj')">delete</button>
-        <button role="button" onclick="showForm('query')">query</button>
-        <button role="button" onclick="showForm('remoteUpdate')">import</button>
+    <div class="button-panel">
+        <button data-lang-key="createBtn" role="button" onclick="UI.showForm('create',this)"></button>
+        <div class="api-legend">
+            <header>post</header>
+            <span class="payload">JSON Object</span>
+            <span class="returns success">201: Success</span>
+            <span class="returns error">400: Malformed JSON</span>
+            <span class="returns error">403: No Valid Token</span>
+            <span class="returns error">500: Server Error</span>
+        </div>
+        <button data-lang-key="updateBtn" role="button" onclick="UI.showForm('rerumUpdate',this)"></button>
+        <div class="api-legend">
+            <header>put, patch</header>
+            <span class="payload">JSON Object</span>
+            <span class="returns success">200: Success</span>
+            <span class="returns error">400: Malformed JSON</span>
+            <span class="returns error">403: Object Deleted</span>
+            <span class="returns error">500: Server Error</span>
+        </div>
+        <button data-lang-key="overwriteBtn" role="button" onclick="UI.showForm('overwrite',this)"></button>
+        <div class="api-legend">
+            <header>put</header>
+            <span class="payload">JSON Object</span>
+            <span class="returns success">200: Success</span>
+            <span class="returns error">400: Malformed JSON</span>
+            <span class="returns error">403: Object Deleted or Released</span>
+            <span class="returns error">403: No Valid Token</span>
+            <span class="returns error">500: Server Error</span>
+        </div>
+        <button data-lang-key="deleteBtn" role="button" onclick="UI.showForm('deleteObj',this)"></button>
+        <div class="api-legend">
+            <header>delete</header>
+            <span class="payload">no payload</span>
+            <span class="returns success">204: Success</span>
+            <span class="returns error">401: Not Owner</span>
+            <span class="returns error">403: Object Deleted or Released</span>
+            <span class="returns error">403: No Valid Token</span>
+            <span class="returns error">500: Server Error</span>
+        </div>
+        <button data-lang-key="queryBtn" role="button" onclick="UI.showForm('query',this)"></button>
+        <div class="api-legend">
+            <header>post</header>
+            <span class="payload">JSON Object</span>
+            <span class="returns success">200: [results]</span>
+            <span class="returns error">500: Server Error</span>
+        </div>
+        <button data-lang-key="importBtn" role="button" onclick="UI.showForm('remoteUpdate',this)"></button>
+        <div class="api-legend">
+            <header>put</header>
+            <span class="payload">JSON Object</span>
+            <span class="returns success">200: Success</span>
+            <span class="returns error">403: No Valid Token</span>
+            <span class="returns error">500: Server Error</span>
+        </div>
     </div>
 
-    <form id="query" action="javascript:void(0);" onsubmit="queryAction(this)" data-hidden="true">
-        <h2>Find by Property</h2>
-        <p>
-            Enter a key and value to search RERUM for objects containing that key-value pair.
-            *Note RERUM supports more complex queries than this simple form (multi-key, embedded-key, wildcards, etc.)
-        </p>
-        <label for="importId">
-            Key
+    <form id="query" action="javascript:void(0);" onsubmit="Action.query(this)" data-hidden="true">
+        <h2 data-lang-key="queryTitle"></h2>
+        <button data-lang-key="loadExample" type="button" class="example"
+            onclick="queryKey.value='test';queryValue.value='query'"></button>
+        <p data-lang-key="queryDesc"></p>
+        <label for="importId" data-lang-key="queryHelpText1">
         </label>
         <input type="text" id="queryKey" />
-        <label for="importId">
-            Value
+        <label for="importId" data-lang-key="queryHelpText2">
         </label>
         <input type="text" id="queryValue" />
-        <button type="submit" role="button"> Send Query </button>
+        <button type="submit" role="button" data-lang-key="queryBtn"> </button>
     </form>
-    <form id="remoteUpdate" action="javascript:void(0);" onsubmit="importAction(this)" data-hidden="true">
-        <h2>Import Resource</h2>
-        <p>
-            Provide the URI of an object external to RERUM to be imported into RERUM and attribute to your RERUM
-            registered application.
-            This results in a new object in RERUM that references the original provided URI so as not to alter the
-            original object.
+    <form id="remoteUpdate" action="javascript:void(0);" onsubmit="Action.import(this)" data-hidden="true">
+        <h2 data-lang-key="importTitle"></h2>
+        <button data-lang-key="loadExample" type="button" class="example"
+            onclick="queryValue.value='https://iiif.io/api/cookbook/recipe/0001-mvm-image/manifest.json'"></button>
+        <p data-lang-key="importDesc">
         </p>
-        <label for="importId">
-            URI to Import
+        <label for="importId" data-lang-key="importHelpText">
         </label>
         <input type="url" id="importId" />
-        <button type="submit" role="button"> Import </button>
+        <button type="submit" role="button" data-lang-key="importBtn"> </button>
     </form>
-    <form id="rerumUpdate" action="javascript:void(0);" onsubmit="updateAction(this)" data-hidden="true">
-        <h2>Update Resource</h2>
-        <p>
-            Provide the URI of an object to update. Then, provide a new representation of the JSON object to update
-            with.
-            By default, this is a RESTful <a
-                href="https://medium.com/backticks-tildes/restful-api-design-put-vs-patch-4a061aa3ed0b"
-                target="_blank">PUT update</a>.
-            The resulting object is attributed to your RERUM registered agent.
+    <form id="rerumUpdate" action="javascript:void(0);" onsubmit="Action.update(this)" data-hidden="true">
+        <h2 data-lang-key="updateTitle"></h2>
+        <p data-lang-key="updateDesc">
         </p>
-        <label for="updateId">
-            URI to Update
+        <label for="updateId" data-lang-key="updateHelpText1">
         </label>
         <input type="url" id="updateId" />
-        <label for="updateJSON">
-            New JSON representation
+        <label for="updateJSON" data-lang-key="updateHelpText2">
         </label>
         <textarea id="updateJSON"></textarea>
-        <button type="submit" role="button"> Update </button>
+        <button type="submit" role="button" data-lang-key="updateBtn"> </button>
     </form>
-    <form id="overwrite" action="javascript:void(0);" onsubmit="overwriteAction(this)" data-hidden="true">
-        <h2>Overwrite Resource</h2>
-        <p>
-            Provide the URI of an object to overwrite. Then, provide a new representation of the JSON object to
-            overwrite with.
-            This will perform a RESTful <a
-                href="https://medium.com/backticks-tildes/restful-api-design-put-vs-patch-4a061aa3ed0b"
-                target="_blank">PUT update</a>
-            but will not make a new node in history. Instead, the originating node at the provided URI will be
-            overwritten, with no way to see
-            how it originally existed. Only those objects attributed to this application's RERUM registration agent can
-            be overwritten.
+    <form id="overwrite" action="javascript:void(0);" onsubmit="Action.overwrite(this)" data-hidden="true">
+        <h2 data-lang-key="overwriteTitle"></h2>
+        <p data-lang-key="overwriteDesc">
         </p>
-        <label for="overwriteId">
-            URI to Overwrite
+        <label for="overwriteId" data-lang-key="overwriteHelpText1">
         </label>
         <input type="url" id="overwriteId" />
-        <label for="overwriteJSON">
-            New JSON representation
+        <label for="overwriteJSON" data-lang-key="overwriteHelpText2">
         </label>
         <textarea id="overwriteJSON"></textarea>
-        <button type="submit" role="button"> Overwrite </button>
+        <button type="submit" role="button" data-lang-key="overwriteBtn"> </button>
     </form>
-    <form id="create" action="javascript:void(0);" onsubmit="createAction(this)">
-        <h2>Create Resource</h2>
-        <p>Provide a valid JSON object to create an object in RERUM attributed to your RERUM registered application.</p>
-        <label for="createJSON">
-            JSON to Create
+    <form id="create" action="javascript:void(0);" onsubmit="Action.create(this)">
+        <h2 data-lang-key="createTitle"></h2>
+        <button data-lang-key="loadExample" type="button" class="example"
+            onclick="createJSON.value=JSON.stringify({test:'creating',numbers:42,booleans:true}, undefined, 4);"></button>
+        <p data-lang-key="createDesc"></p>
+        <label for="createJSON" data-lang-key="createHelpText">
         </label>
         <textarea id="createJSON"></textarea>
-        <button type="submit" role="button"> Create </button>
+        <button type="submit" role="button" data-lang-key="createBtn"> </button>
     </form>
-    <form id="deleteObj" action="javascript:void(0);" onsubmit="deleteAction(this)" data-hidden="true">
-        <h2>Delete Resource</h2>
-        <p>
-            Provide a URI to a RERUM object attributed to your RERUM registered application to delete it.
-            Only those objects attributed to this application's RERUM registration agent can be deleted.
+    <form id="deleteObj" action="javascript:void(0);" onsubmit="Action.delete(this)" data-hidden="true">
+        <h2 data-lang-key="deleteTitle"></h2>
+        <p data-lang-key="deleteDesc">
         </p>
-        <label for="deleteId">
-            URI to Delete
+        <label for="deleteId" data-lang-key="deleteHelpText">
         </label>
         <input type="url" id="deleteId" />
-        <button type="submit" role="button"> Delete </button>
+        <button type="submit" role="button" data-lang-key="deleteBtn"> </button>
     </form>
 
     <div id="flash-message">
@@ -221,307 +145,6 @@
     <div id="obj-viewer">
     </div>
 
-    <script>
-        //These are the internal application endpoints, they call out to the RERUM actions.
-        const CREATE_URL = "create"
-        const UPDATE_URL = "update"
-        const QUERY_URL = "query"
-        const DELETE_URL = "delete"
-        const OVERWRITE_URL = "overwrite"
-
-        /**
-         * The UI for controlling which tab shows (which happens to be a form)
-         * @param {HTMLElement} form
-         */
-        function showForm(form) {
-            let forms = document.getElementsByTagName('form')
-            for (let f of forms) {
-                f.setAttribute("data-hidden", "true")
-            }
-            let showForm = document.getElementById(form)
-            showForm.removeAttribute("data-hidden")
-            document.getElementById("obj-viewer").style.display = "none"
-            document.getElementById("flash-message").style.display = "none"
-        }
-
-        /**
-         * The UI for controlling which tab shows (which happens to be a form)
-         * @param {string} msg The text to show
-         * @param {string} type A class to provide to color the text 
-         */
-        function setMessage(msg, type) {
-            let msgDiv = document.getElementById("flash-message")
-            msgDiv.innerHTML = msg
-            msgDiv.className = (type) ? type : ""
-            msgDiv.style.display = "block"
-        }
-
-        /**
-         * The UI for showing resulting JSON objects
-         * @param {object} object The object to put into HTML
-         */
-        function setObject(object) {
-            let showThis
-            if (typeof object !== "object") {
-                try {
-                    showThis = JSON.parse(object)
-                } catch (error) {
-                    showThis = { error: error }
-                }
-            } else {
-                showThis = object
-            }
-            let viewObject = document.getElementById("obj-viewer")
-            viewObject.innerHTML = JSON.stringify(showThis, undefined, 4)
-            viewObject.style.display = "block"
-        }
-
-        /**
-         * Send a query into RERUM and show the resulting response.
-         * @param {HTMLElement} form 
-         */
-        async function queryAction(form) {
-            let entries = form.getElementsByTagName("input")
-            let query = {}
-            query[entries[0].value] = entries[1].value
-            fetch(QUERY_URL, {
-                method: "POST",
-                mode: "cors",
-                headers: new Headers({
-                    'Content-Type': 'application/json; charset=utf-8'
-                }),
-                body: JSON.stringify(query)
-            })
-                .then(response => response.json())
-                .then(queryResult => {
-                    if (queryResult.code && queryResult.code >= 400) {
-                        throw Error(`${queryResult.code}: ${queryResult.message}`)
-                    }
-                    setMessage("See all matching results for the query below.")
-                    setObject(queryResult)
-                })
-                .catch(err => {
-                    console.error("There was an error trying to query")
-                    console.error(err)
-                    setMessage(err)
-                    document.getElementById("obj-viewer").style.display = "none"
-                })
-        }
-
-        /**
-         * Import an object that exists outside of RERUM into RERUM, attributed to this application's RERUM registration agent.
-         * @see /src/rerm/tokens/tiny.properties access_token entry for attribution
-         * @param {type} form
-         */
-        async function importAction(form) {
-            let url = form.getElementsByTagName("input")[0].value
-            let origObj = await fetch(url)
-                .then(response => response.json())
-                .then(objForImport => {
-                    Object.assign(objForImport, { '@id': url })
-                    fetch(UPDATE_URL, {
-                        method: 'PUT',
-                        body: JSON.stringify(objForImport),
-                        headers: new Headers({
-                            'Content-Type': 'application/json; charset=utf-8'
-                        })
-                    })
-                        .then(response => response.json())
-                        .then(resultObj => {
-                            if (resultObj.code && resultObj.code >= 400) {
-                                throw Error(`${resultObj.code}: ${resultObj.message}`)
-                            }
-                            setMessage("Imported URI " + url + ". See resulting object below.")
-                            setObject(resultObj.new_obj_state)
-                        })
-                        .catch(err => {
-                            console.error("There was an error trying to import object with identifier " + url)
-                            console.error(err)
-                            setMessage(err)
-                            setObject({ error: { message: err.message } }) //This is hidden with the next line of code.  Doesn't have to be.
-                            document.getElementById("obj-viewer").style.display = "none"
-                        })
-                })
-                .catch(err => {
-                    console.error("Could not resolve object with identifier '" + url + "'")
-                    console.error(err)
-                    setMessage("Could not resolve object with identifier '" + url + "'")
-                    document.getElementById("obj-viewer").style.display = "none"
-                })
-
-
-        }
-
-        /**
-         * Do a PUT update on an existing RERUM object.  The resulting object is attributed to this application's RERUM registration agent.
-         * @see /src/rerm/tokens/tiny.properties access_token entry for attribution
-         * @param {type} form
-         * @param {object} objIn An optional way to pass the new JSON representation as a parameter
-         */
-        async function updateAction(form, objIn) {
-            let uri = form.getElementsByTagName("input")[0].value
-            let obj
-            if (objIn !== undefined && typeof objIn === "object") {
-                obj = objIn
-            }
-            else {
-                obj = form.getElementsByTagName("textarea")[0].value
-                try {
-                    obj = JSON.parse(obj)
-                }
-                catch (err) {
-                    console.error("You did not provide valid JSON")
-                    setMessage("You did not provide valid JSON")
-                    document.getElementById("obj-viewer").style.display = "none"
-                    return false
-                }
-            }
-            obj["@id"] = uri
-            fetch(UPDATE_URL, {
-                method: 'PUT',
-                body: JSON.stringify(obj),
-                headers: new Headers({
-                    'Content-Type': 'application/json; charset=utf-8'
-                })
-            })
-                .then(response => {
-                    if (response.ok) { return response.json() }
-                    throw Error(`${response.code}: ${response.message}`)
-                })
-                .then(resultObj => {
-                    setMessage("Updated URI " + uri + ".  See resulting object below.")
-                    setObject(resultObj)
-                })
-                .catch(err => {
-                    console.error("There was an error trying to update object at " + uri)
-                    console.error(err)
-                    setMessage(err)
-                    setObject({ error: { message: err.message } }) // This is hidden with the next line of code.  Doesn't have to be.
-                    document.getElementById("obj-viewer").style.display = "none"
-                })
-        }
-
-        /**
-         * Provide a JSON object to create in RERUM.  The resulting object is attributed to this application's RERUM registration agent.
-         * @see /src/rerm/tokens/tiny.properties access_token entry for attribution
-         * @param {type} form
-         */
-        async function createAction(form) {
-            let obj = form.getElementsByTagName("textarea")[0].value
-            try {
-                obj = JSON.parse(obj)
-            } catch (error) {
-                console.error("You did not provide valid JSON")
-                setMessage("You did not provide valid JSON")
-                document.getElementById("obj-viewer").style.display = "none"
-                return false
-            }
-            fetch(CREATE_URL, {
-                method: 'POST',
-                body: JSON.stringify(obj),
-                headers: new Headers({
-                    'Content-Type': 'application/json; charset=utf-8'
-                })
-            })
-                .then(response => {
-                    const locationHeader = response.headers.get("Location") ?? response.headers.get("location")
-                    if (response?.code >= 400) {
-                        throw Error(`${response?.code}: ${response.statusText}`)
-                    }
-                    setMessage(`Created new object at ${locationHeader ?? MISSING}.  See result below.`)
-                    setObject(Object.assign({ '@id': locationHeader }, obj))
-                })
-                .catch(err => {
-                    console.error("There was an error trying to create object")
-                    console.error(err)
-                    setMessage(err.message)
-                    setObject({ error: { message: err.message } }) //This is hidden with the next line of code.  Doesn't have to be.
-                    document.getElementById("obj-viewer").style.display = "none"
-                })
-        }
-
-        /**
-          * Provide the URL of a RERUM object to delete.  Only those objects attributed to this application's RERUM registration agent can be deleted.
-          * @see /src/rerm/tokens/tiny.properties access_token entry for attribution
-          * @param {type} form
-          */
-        async function deleteAction(form) {
-            let url = form.getElementsByTagName("input")[0].value
-            fetch(`${DELETE_URL}/${url.split('id/').pop()}`, {
-                method: 'DELETE',
-                headers: new Headers({
-                    'Content-Type': 'text/plain; charset=utf-8'
-                })
-            })
-                .then(response => {
-                    if (response.status === 204) {
-                        setMessage("Object Deleted.  See result below.")
-                        fetch(url).then(resp => resp.json()).then(deletedObj => setObject(deletedObj))
-                    }
-                    else {
-                        //There was an error
-                        console.error("There was an error trying to delete object")
-                        console.error(response.statusText)
-                        setMessage(response.statusText)
-                        document.getElementById("obj-viewer").style.display = "none"
-                    }
-                })
-                .catch(err => {
-                    console.error("There was an error trying to delete object")
-                    console.error(err)
-                    document.getElementById("obj-viewer").style.display = "none"
-                    setMessage(err)
-                })
-        }
-
-        /**
-         * Overwrite the representation of a JSON object at a given URL. Note this will not create a new node in history, it will overwrite the existing node.
-         * TOnly those objects attributed to this application's RERUM registration agent can be overwritten.
-         * @see /src/rerm/tokens/tiny.properties access_token entry for attribution
-         * @param {type} form
-         * @param {object} objIn An optional way to pass the new JSON representation as a parameter
-         */
-        async function overwriteAction(form, objIn) {
-            let uri = form.getElementsByTagName("input")[0].value
-            let obj
-            if (objIn !== undefined && typeof objIn === "object") {
-                obj = objIn
-            }
-            else {
-                obj = form.getElementsByTagName("textarea")[0].value
-                try {
-                    obj = JSON.parse(obj)
-                }
-                catch (err) {
-                    console.error("You did not provide valid JSON")
-                    setMessage("You did not provide valid JSON")
-                    document.getElementById("obj-viewer").style.display = "none"
-                    return false
-                }
-            }
-            obj["@id"] = uri
-            fetch(OVERWRITE_URL, {
-                method: 'PUT',
-                body: JSON.stringify(obj),
-                headers: new Headers({
-                    'Content-Type': 'application/json; charset=utf-8'
-                })
-            })
-                .then(response => {
-                    setMessage(`URI ${uri} overwritten at ${response.headers.get("Location") ?? response.headers.get("location")}. See resulting object below:`)
-                    setObject(obj)
-                })
-                .catch(err => {
-                    if (err?.code >= 400) {
-                        setMessage(`${resultObj.code}: ${resultObj.message}`)
-                    } else {
-                        console.error("There was an error trying to overwrite object at " + uri)
-                        console.error(err)
-                        setMessage(err)
-                    }
-                })
-        }
-    </script>
 </body>
 
 </html>
