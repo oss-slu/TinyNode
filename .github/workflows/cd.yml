@@ -9,10 +9,11 @@ on:
 jobs:
     deploy:
       # Deploy to newprd01 with SSH
-      runs-on: [self-hosted, vlcdhprdp02]
       strategy: 
         matrix:
             node-version: [16]
+            machines: [vlcdhprdp02, vlcdhp02]
+      runs-on: ${{ matrix.machines }}
       steps:
         - uses: actions/checkout@v3
         - run: |
