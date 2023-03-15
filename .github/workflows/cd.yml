@@ -1,0 +1,28 @@
+name: TinyNode Site Deploy
+on: 
+  push:
+    branches:
+      ci-cd
+  pull_request:
+    branches:
+      ci-cd
+jobs:
+    deploy:
+      # Deploy to newprd01 with SSH
+      runs-on: [self-hosted, vlcdhprdp02]
+      strategy: 
+        matrix:
+            node-version: [16]
+      steps:
+        - uses: actions/checkout@v3
+        - run: |
+            if [[ ! -e /srv/node/logs/tinynode.txt ]]; then
+                mkdir -p /srv/node/logs
+                touch /srv/node/logs/tinynode.txt
+            fi
+            cd /srv/node/tiny-node/
+            pm2 stop tinyNode
+            git stash
+            git pull
+            npm install
+            pm2 start -i max bin/tinyNode.js

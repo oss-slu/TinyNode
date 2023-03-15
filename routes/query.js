@@ -11,14 +11,12 @@ router.post('/', async (req, res, next) => {
     // check body for JSON
     JSON.stringify(req.body)
     const queryBody = req.body
-
     // check limit and skip for INT
     if (isNaN(parseInt(lim) + parseInt(skip))
       || (lim < 0)
       || (skip < 0)) {
       throw Error("`limit` and `skip` values must be positive integers or omitted.")
     }
-
     const queryOptions = {
       json: queryBody,
       headers: {

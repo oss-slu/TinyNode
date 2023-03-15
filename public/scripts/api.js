@@ -32,21 +32,21 @@ async function query(form) {
         }),
         body: JSON.stringify(queryObj)
     })
-        .then(response => {
-            if (!response.ok) { throw response }
-            return response.json()
-        })
-        .then(queryResult => {
-            _customEvent("rerum-result", "See all matching results for the query below.", queryResult)
-        })
-        .catch(err => {
-            _customEvent("rerum-error", "There was an error trying to query", {}, err)
-        })
+    .then(response => {
+        if (!response.ok) { throw response }
+        return response.json()
+    })
+    .then(queryResult => {
+        _customEvent("rerum-result", "See all matching results for the query below.", queryResult)
+    })
+    .catch(err => {
+        _customEvent("rerum-error", "There was an error trying to query", {}, err)
+    })
 }
 
 /**
  * Import an object that exists outside of RERUM into RERUM, attributed to this application's RERUM registration agent.
- * @see /src/rerm/tokens/tiny.properties access_token entry for attribution
+ * @see /src/rerm/tokens/tiny.properties ACCESS_TOKEN entry for attribution
  * @param {type} form
  */
 async function importObj(form) {
@@ -80,7 +80,7 @@ async function importObj(form) {
 
 /**
  * Do a PUT update on an existing RERUM object.  The resulting object is attributed to this application's RERUM registration agent.
- * @see /src/rerm/tokens/tiny.properties access_token entry for attribution
+ * @see /src/rerm/tokens/tiny.properties ACCESS_TOKEN entry for attribution
  * @param {type} form
  * @param {object} objIn An optional way to pass the new JSON representation as a parameter
  */
@@ -122,7 +122,7 @@ async function update(form, objIn) {
 
 /**
  * Provide a JSON object to create in RERUM.  The resulting object is attributed to this application's RERUM registration agent.
- * @see /src/rerm/tokens/tiny.properties access_token entry for attribution
+ * @see /src/rerm/tokens/tiny.properties ACCESS_TOKEN entry for attribution
  * @param {type} form
  */
 async function create(form) {
@@ -142,22 +142,20 @@ async function create(form) {
             'Content-Type': 'application/json; charset=utf-8'
         })
     })
-        .then(response => {
-            if (!response.ok) { throw response }
-            return response.json()
-        })
-        .then(response => {
-            const locationHeader = response.headers.get("Location") ?? response.headers.get("location")
-            _customEvent("rerum-result", `Created new object at ${locationHeader ?? MISSING}.  See result below.`, Object.assign({ '@id': locationHeader }, obj))
-        })
-        .catch(err => {
-            _customEvent("rerum-error", "There was an error trying to create object", {}, err)
-        })
+    .then(response => {
+        if (!response.ok) { throw response }
+        const locationHeader = response.headers.get("Location") ?? response.headers.get("location")
+        _customEvent("rerum-result", `Created new object at ${locationHeader ?? MISSING}.  See result below.`, Object.assign({ '@id': locationHeader }, obj))
+        return response.json()
+    })
+    .catch(err => {
+        _customEvent("rerum-error", "There was an error trying to create object", {}, err)
+    })
 }
 
 /**
   * Provide the URL of a RERUM object to delete.  Only those objects attributed to this application's RERUM registration agent can be deleted.
-  * @see /src/rerm/tokens/tiny.properties access_token entry for attribution
+  * @see /src/rerm/tokens/tiny.properties ACCESS_TOKEN entry for attribution
   * @param {type} form
   */
 async function deleteObj(form) {
@@ -182,7 +180,7 @@ async function deleteObj(form) {
 /**
  * Overwrite the representation of a JSON object at a given URL. Note this will not create a new node in history, it will overwrite the existing node.
  * TOnly those objects attributed to this application's RERUM registration agent can be overwritten.
- * @see /src/rerm/tokens/tiny.properties access_token entry for attribution
+ * @see /src/rerm/tokens/tiny.properties ACCESS_TOKEN entry for attribution
  * @param {type} form
  * @param {object} objIn An optional way to pass the new JSON representation as a parameter
  */

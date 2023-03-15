@@ -9,19 +9,16 @@ router.post('/', async (req, res, next) => {
     // check body for JSON
     JSON.stringify(req.body)
     const createBody = req.body
-
     const createOptions = {
       json: createBody,
       headers: {
         'user-agent': 'Tiny-Node',
-        'Authorization': `Bearer ${process.env.access_token}` // not required for query
+        'Authorization': `Bearer ${process.env.ACCESS_TOKEN}` // not required for query
       }
     }
     const createURL = `${process.env.RERUM_API_ADDR}create`
-    const result = await got.post(createURL, createOptions)
-      .then((saved) => {
-        res.setHeader("Location", saved.headers["location"])
-      })
+    const result = await got.post(createURL, createOptions).json()
+    res.setHeader("Location", result["@id"])
     res.status(201)
     res.send(result)
   }
