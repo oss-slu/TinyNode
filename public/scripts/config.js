@@ -44,7 +44,7 @@ const config = {
         importHelpText: "URI to Import",
 
     },
-        RERUM_REGISTRATION_URL: 'https://storedev.rerum.io/v1/' // imported from .env file
+        RERUM_REGISTRATION_URL: 'https://store.rerum.io/v1/' // imported from .env file
 }
 
 // initialize page
