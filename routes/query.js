@@ -21,7 +21,8 @@ router.post('/', async (req, res, next) => {
       json: queryBody,
       headers: {
         'user-agent': 'Tiny-Node',
-        'Authorization': `Bearer ${process.env.RERUM_TOKEN}` // not required for query
+        'Authorization': `Bearer ${process.env.RERUM_TOKEN}`, // not required for query
+        'Content-Type' : "application/json;charset=utf-8"
       }
     }
     const queryURL = `${process.env.RERUM_API_ADDR}query?limit=${lim}&skip=${skip}`

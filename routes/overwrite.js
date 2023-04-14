@@ -19,7 +19,8 @@ router.put('/', async (req, res, next) => {
       json: overwriteBody,
       headers: {
         'user-agent': 'Tiny-Node',
-        'Authorization': `Bearer ${process.env.ACCESS_TOKEN}`
+        'Authorization': `Bearer ${process.env.ACCESS_TOKEN}`,
+        'Content-Type' : "application/json;charset=utf-8"
       }
     }
     const overwriteURL = `${process.env.RERUM_API_ADDR}overwrite`

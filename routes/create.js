@@ -13,7 +13,8 @@ router.post('/', async (req, res, next) => {
       json: createBody,
       headers: {
         'user-agent': 'Tiny-Node',
-        'Authorization': `Bearer ${process.env.ACCESS_TOKEN}` // not required for query
+        'Authorization': `Bearer ${process.env.ACCESS_TOKEN}`, // not required for query
+        'Content-Type' : "application/json;charset=utf-8"
       }
     }
     const createURL = `${process.env.RERUM_API_ADDR}create`
