@@ -19,10 +19,6 @@ var overwriteRouter = require('./routes/overwrite')
 
 var app = express()
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'))
-app.set('view engine', 'pug')
-
 app.use(logger('dev'))
 app.use(express.json())
 if(process.env.OPEN_API_CORS !== "false") { 
@@ -63,7 +59,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500)
-  res.render('error')
+  res.send(err.message)
 })
 
 module.exports = app
