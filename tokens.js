@@ -1,7 +1,9 @@
-const fs = require('node:fs/promises')
-const { parse, stringify } = require('envfile')
+import dotenv from "dotenv"
+const storedEnv = dotenv.config()
+import fs from "node:fs/promises"
+import { parse, stringify } from "envfile"
+
 const sourcePath = '.env'
-let expired = true
 
 // https://stackoverflow.com/a/69058154/1413302
 const isTokenExpired = (token) => (Date.now() >= JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString()).exp * 1000)
@@ -26,7 +28,7 @@ async function generateNewAccessToken() {
     try {
         const data = await fs.readFile('./.env', { encoding: 'utf8' })
         // Please note that this parse() will remove all #comments in the .env file.
-        let env_file_obj = parse(data)
+        const env_file_obj = parse(data)
         env_file_obj.ACCESS_TOKEN = tokenObject.access_token
         await fs.writeFile('./.env', stringify(env_file_obj))
         console.log("TinyNode now has an updated access token.")
@@ -42,7 +44,14 @@ async function generateNewAccessToken() {
  * This does not validate your access token, so you may still be rejected by 
  * your RERUM instance as unauthorized.
  */
-if (isTokenExpired(process.env.ACCESS_TOKEN)) {
-    console.log("Tiny Node detected an expired access token.  Updating the token now.")
-    generateNewAccessToken()
+function updateExpiredToken () {
+    if (isTokenExpired(process.env.ACCESS_TOKEN)) {
+        console.log("TinyNode detected an expired access token.  Updating the token now.")
+        generateNewAccessToken()
+    }
+    else{
+        console.log("TinyNode token is up to date")
+    }
 }
+
+export {updateExpiredToken}
