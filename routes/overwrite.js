@@ -1,15 +1,16 @@
 import express from "express"
 const router = express.Router()
+import rerumPropertiesWasher from "../preprocessor.js"
 
 /* PUT an overwrite to the thing. */
-router.put('/', async (req, res, next) => {
+router.put('/', rerumPropertiesWasher, async (req, res, next) => {
 
   try {
     // check body for JSON
     const body = JSON.stringify(req.body)
 
     // check for @id; any value is valid
-    if (!(req.body['@id'] ?? req.body.id)) {
+    if (!(req.body['@id'])) {
       throw Error("No record id to overwrite! (https://centerfordigitalhumanities.github.io/rerum_server/API.html#overwrite)")
     }
 
