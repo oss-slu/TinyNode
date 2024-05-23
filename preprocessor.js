@@ -28,6 +28,11 @@ const rerumPropertiesWasher = async (req, res, next) => {
         // cannot look for any aliases
         return res.status(400).json({ error: `Missing required properties: @context, ${missingProps.join(', ')}` })
     }
+    // clean up the document as jsonld
+    if (missingProps.includes('@type')) {
+        // temp property
+        req.body['@type'] = ''
+    }
     // look for aliases in the @context
     return LD.compact(req.body, req.body['@context'])
         .then(compacted => {
@@ -35,6 +40,9 @@ const rerumPropertiesWasher = async (req, res, next) => {
                 if (compacted.hasOwnProperty(prop)) {
                     req.body[prop] = compacted[prop]
                 }
+            }
+            if(Array.isArray(req.body['@type'])) {
+                req.body['@type'] = req.body['@type'].filter(x => x !== '')
             }
             next()
         })
