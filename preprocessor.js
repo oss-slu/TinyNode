@@ -4,7 +4,7 @@
  */
 
 // expressjs middleware for preprocessing documents. Use the jsonld library to make sure the "@id" and "@type" fields are included on the JSON object in the request.body
-import * as jsonld from 'jsonld'
+import LD from 'jsonld'
 
 const rerumPropertiesWasher = async (req, res, next) => {
     if (typeof req.body !== 'object' || req.body === null) {
@@ -28,31 +28,19 @@ const rerumPropertiesWasher = async (req, res, next) => {
         // cannot look for any aliases
         return res.status(400).json({ error: `Missing required properties: @context, ${missingProps.join(', ')}` })
     }
-    const LD = new jsonld.JsonLdProcessor()
     // look for aliases in the @context
-    const id = await LD.compact(req.body, req.body['@context'])
+    return LD.compact(req.body, req.body['@context'])
         .then(compacted => {
-            if (!compacted.hasOwnProperty('@id')) {
-                req.body['@id'] = compacted['@id']
+            for (const prop of missingProps) {
+                if (compacted.hasOwnProperty(prop)) {
+                    req.body[prop] = compacted[prop]
+                }
             }
-            return compacted['@id']
+            next()
         })
         .catch(err => {
-            return res.status(400).json({ error: `Missing required property: @id` })
+            next(err)
         })
-    const type = await LD.compact(req.body, req.body['@context'])
-        .then(compacted => {
-            if (!compacted.hasOwnProperty('@type')) {
-                req.body['@type'] = compacted['@type']
-            }
-            return compacted['@type']
-        })
-        .catch(err => {
-            return res.status(400).json({ error: `Missing required property: @type` })
-        })
-    return Promise.all([id ?? Promise.resolve(true), type ?? Promise.resolve(true)])
-    // continue to the next middleware or route handler
-    next()
 }
 
 export default rerumPropertiesWasher
