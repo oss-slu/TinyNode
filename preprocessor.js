@@ -11,38 +11,32 @@ const rerumPropertiesWasher = async (req, res, next) => {
         // if the request body is not an object, return an error
         return res.status(400).json({ error: 'Invalid request body' })
     }
-    let missingProps = []
     // check if the JSON object has an "@id" field
-    if (!req.body.hasOwnProperty('@id')) {
-        missingProps.push('@id')
+    if (req.body.hasOwnProperty('@id')) {
+        next()
+        return
+    }
+    let missingProps = ['@id']
+    // Without @context, we've no idea how to proceed
+    if (!req.body.hasOwnProperty('@context')) {
+        return res.status(400).json({ error: `Missing required properties: @context, ${missingProps.join(', ')}` })
     }
     // check if the JSON object has an "@type" field
     if (!req.body.hasOwnProperty('@type')) {
         missingProps.push('@type')
-    }
-    if (!missingProps.includes('@id')) { 
-        next()
-        return
-    } // continue to the next middleware or route handler
-    if (!req.body.hasOwnProperty('@context')) {
-        // cannot look for any aliases
-        return res.status(400).json({ error: `Missing required properties: @context, ${missingProps.join(', ')}` })
-    }
-    // clean up the document as jsonld
-    if (missingProps.includes('@type')) {
-        // temp property
         req.body['@type'] = ''
     }
     // look for aliases in the @context
-    return LD.compact(req.body, req.body['@context'])
-        .then(compacted => {
+    return LD.expand(req.body)
+        .then(expanse => {
+            const expanded = expanse[0]
             for (const prop of missingProps) {
-                if (compacted.hasOwnProperty(prop)) {
-                    req.body[prop] = compacted[prop]
+                if (expanded.hasOwnProperty(prop)) {
+                    req.body[prop] = expanded[prop]
                 }
             }
             if(Array.isArray(req.body['@type'])) {
-                req.body['@type'] = req.body['@type'].filter(x => x !== '')
+                req.body['@type'] = expanded['@type'].pop()
             }
             next()
         })
