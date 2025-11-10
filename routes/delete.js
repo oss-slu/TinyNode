@@ -31,8 +31,12 @@ router.delete('/', async (req, res, next) => {
 /* DELETE a delete to the thing. */
 router.delete('/:id', async (req, res, next) => {
   try {
-  
-    const deleteURL = `${process.env.RERUM_API_ADDR}delete/${req.params.id}`
+    // Only allow valid IDs (alphanumeric, dash, underscore, 1-64 chars)
+    const id = req.params.id;
+    if (!/^[\w-]{1,64}$/.test(id)) {
+      return res.status(400).send("Invalid ID");
+    }
+    const deleteURL = `${process.env.RERUM_API_ADDR}delete/${id}`
     const deleteOptions = {
       method: 'DELETE',
       headers: {
